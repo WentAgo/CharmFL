@@ -13,7 +13,7 @@ public class PluginModule {
     private static final String CHECK_PIP_BIN = "check_pip.py";
     private static final String PIP_BIN = "pip";
     private static final String REQUIREMENTS_FILE_NAME = "requirements.txt";
-    private static final String RESULTS_JSON_FILE_NAME = "results.json";
+    private static final String RESULTS_JSON_FILE_NAME = "CharmFL"+File.separator+"results.json";
     private static PluginId pluginId = null;
     private static String pluginPath = "";
     private static String pyflBinPath = "";

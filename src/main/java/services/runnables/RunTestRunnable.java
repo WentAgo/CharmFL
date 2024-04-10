@@ -59,34 +59,35 @@ public class RunTestRunnable extends Task.Backgroundable implements Progress {
 
         progressIndicator.setText(Resources.get("states", "selected_sdk"));
 
-        ProjectModule.setProjectSdk(ProjectRootManager.getInstance(ProjectModule.getProject()).getProjectSdk());
-        if (ProjectModule.getProjectSdk() == null) {
-            ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showMessageDialog(
-                        ProjectModule.getProject(),
-                        Resources.get("errors", "no_sdk_selected_error"),
-                        Resources.get("titles", "project_sdk_not_found_title"),
-                        Messages.getErrorIcon());
-            });
-            flService.setTestDataCollecting(false);
-            return;
-        }
+//        ProjectModule.setProjectSdk(ProjectRootManager.getInstance(ProjectModule.getProject()).getProjectSdk());
+//        if (ProjectModule.getProjectSdk() == null) {
+//            ApplicationManager.getApplication().invokeLater(() -> {
+//                Messages.showMessageDialog(
+//                        ProjectModule.getProject(),
+//                        //ProjectModule.getProjectSdk().getHomePath(),
+//                        Resources.get("errors", "no_sdk_selected_error"),
+//                        Resources.get("titles", "project_sdk_not_found_title"),
+//                        Messages.getErrorIcon());
+//            });
+//            flService.setTestDataCollecting(false);
+//            return;
+//        }
 
 
         progressIndicator.setText(Resources.get("states", "selected_binary"));
 
-        File sdkBin = new File(ProjectRootManager.getInstance(ProjectModule.getProject()).getProjectSdk().getHomePath());
-        if (!sdkBin.exists() || sdkBin.isDirectory()) {
-            ApplicationManager.getApplication().invokeLater(() -> {
-                Messages.showMessageDialog(
-                        ProjectModule.getProject(),
-                        Resources.get("errors", "sdk_not_found"),
-                        Resources.get("titles", "project_sdk_not_found_title"),
-                        Messages.getErrorIcon());
-            });
-            flService.setTestDataCollecting(false);
-            return;
-        }
+//        File sdkBin = new File(ProjectRootManager.getInstance(ProjectModule.getProject()).getProjectSdk().getHomePath());
+//        if (!sdkBin.exists() || sdkBin.isDirectory()) {
+//            ApplicationManager.getApplication().invokeLater(() -> {
+//                Messages.showMessageDialog(
+//                        ProjectModule.getProject(),
+//                        Resources.get("errors", "sdk_not_found"),
+//                        Resources.get("titles", "project_sdk_not_found_title"),
+//                        Messages.getErrorIcon());
+//            });
+//            flService.setTestDataCollecting(false);
+//            return;
+//        }
 
         String pythonBinPath = ProjectRootManager.getInstance(ProjectModule.getProject()).getProjectSdk().getHomePath();
         PluginModule.setPythonBinPath(pythonBinPath);
