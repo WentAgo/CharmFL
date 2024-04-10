@@ -1,4 +1,5 @@
 import json
+import ast
 
 
 class Result_Builder():
@@ -14,6 +15,7 @@ class Result_Builder():
         self.END_LINE_INDEX = 3
         self.NOT_FOUND_CONTEXT_INDEX = -1
         self.SEPARATOR_CHARACTER = "::"
+        self.control_flow_dict = {}
 
     def set_path_to_root(self, path_to_root):
         self.path_to_root = path_to_root
@@ -36,25 +38,137 @@ class Result_Builder():
         for key, line_scores in self.line_scores.items():
             print(key, line_scores)
             file_name = str(key).split(self.SEPARATOR_CHARACTER)[self.FILE_NAME_INDEX]
-            absolute_path_to_root, relative_path = self.__separate_absolute_and_relative_path(file_name)
-            line_num = str(key).split(self.SEPARATOR_CHARACTER)[LINE_NUMBER_INDEX]
-            class_name, class_start_line_num, class_tar, class_och, class_wong2, class_dstar = self.__get_lines_context_info(
-                self.class_scores, file_name, line_num)
-            method_name, method_start_line_num, method_tar, method_och, method_wong2, method_dstar = self.__get_lines_context_info(
-                self.method_scores, file_name, line_num)
-            context_scores_and_info = {"absolute_path_to_root": absolute_path_to_root, "relative_path": relative_path,
-                                       "line_num": line_num,
-                                       "class_name": class_name, "class_start_line_num": class_start_line_num,
-                                       "class_tar": class_tar,
-                                       "class_och": class_och, "class_wong2": class_wong2, "class_dstar": class_dstar,
-                                       "method_name": method_name, "method_start_line_num": method_start_line_num,
-                                       "method_tar": method_tar, "method_och": method_och, "method_wong2": method_wong2,
-                                       "method_dstar": method_dstar}
-            self.__put_line_scores_to_place(context_scores_and_info, line_scores)
+            with open(file_name, encoding="utf8") as f:
+                file_data = f.read()
+                self.control_flow_dict = self.__search_control_flow_nodes(file_data)
+                absolute_path_to_root, relative_path = self.__separate_absolute_and_relative_path(file_name)
+                line_num = str(key).split(self.SEPARATOR_CHARACTER)[LINE_NUMBER_INDEX]
+                class_name, class_start_line_num, class_tar, class_och, class_wong2, class_dstar = self.__get_lines_context_info(
+                    self.class_scores, file_name, line_num)
+                method_name, method_start_line_num, method_tar, method_och, method_wong2, method_dstar = self.__get_lines_context_info(
+                    self.method_scores, file_name, line_num)
+                context_scores_and_info = {"absolute_path_to_root": absolute_path_to_root,
+                                           "relative_path": relative_path,
+                                           "line_num": line_num,
+                                           "class_name": class_name, "class_start_line_num": class_start_line_num,
+                                           "class_tar": class_tar,
+                                           "class_och": class_och, "class_wong2": class_wong2,
+                                           "class_dstar": class_dstar,
+                                           "method_name": method_name, "method_start_line_num": method_start_line_num,
+                                           "method_tar": method_tar, "method_och": method_och,
+                                           "method_wong2": method_wong2,
+                                           "method_dstar": method_dstar}
+                self.__put_line_scores_to_place(context_scores_and_info, line_scores)
         return self
 
     def toJSON(self):
         return json.dumps(self.results_dictionary, indent=4)
+
+    def get_score_results(self):
+        return self.results_dictionary
+
+    def __search_control_flow_nodes(self, code):
+        # Parse the source code into an AST
+        tree = ast.parse(code)
+
+        # Dictionary to store control flow nodes and their bodies with line numbers
+        control_flow_dict = {}
+
+        # Visitor class to traverse the AST and search for control flow nodes
+        class ControlFlowNodeVisitor(ast.NodeVisitor):
+            def visit_If(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+
+                if len(node.orelse) > 0:
+                    if not isinstance(node.orelse[0], ast.If):
+                        last_else_statements = [statement.lineno for statement in node.orelse]
+                    else:
+                        last_else_statements = self.__get_last_else_statements(node.orelse[0])
+                else:
+                    last_else_statements = []
+
+                control_flow_dict[node.lineno] = {
+                    'type': 'If',
+                    'body': body_statements,
+                    'else': last_else_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_For(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+                control_flow_dict[node.lineno] = {
+                    'type': 'For',
+                    'body': body_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_While(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+                control_flow_dict[node.lineno] = {
+                    'type': 'While',
+                    'body': body_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_Try(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+                control_flow_dict[node.lineno] = {
+                    'type': 'Try',
+                    'body': body_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_ExceptHandler(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+                control_flow_dict[node.lineno] = {
+                    'type': 'Except',
+                    'body': body_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_With(self, node):
+                body_statements = [statement.lineno for statement in node.body]
+                control_flow_dict[node.lineno] = {
+                    'type': 'With',
+                    'body': body_statements
+                }
+                #self.generic_visit(node)
+
+            def visit_FunctionDef(self, node):
+                self.generic_visit(node)
+
+            def visit_ClassDef(self, node):
+                self.generic_visit(node)
+
+            def __get_last_else_statements(self, node):
+                if isinstance(node, ast.If):
+                    if node.orelse:
+                        if isinstance(node.orelse[0], ast.If):
+                            return self.__get_last_else_statements(node.orelse[0])
+                        else:
+                            return self.__get_last_else_statements(node.orelse)
+                    else:
+                        return []
+                else:
+                    return [statement.lineno for statement in node]
+
+        # Create an instance of the visitor and visit the AST
+        visitor = ControlFlowNodeVisitor()
+        visitor.visit(tree)
+
+        return control_flow_dict
+
+    def __get_last_else_statements(self, node):
+        if isinstance(node, ast.If):
+            if node.orelse:
+                if isinstance(node.orelse[0], ast.If):
+                    return self.__get_last_else_statements(node.orelse[0])
+                else:
+                    return self.__get_last_else_statements(node.orelse)
+            else:
+                return []
+        else:
+            return [statement.lineno for statement in node]
 
     def __separate_absolute_and_relative_path(self, fullpath):
         absolute_path = fullpath[:len(self.path_to_root) + 1]
@@ -119,11 +233,23 @@ class Result_Builder():
                                ]}
 
     def __get_line_scores_dictionary(self, context_scores_and_info, line_scores):
-        return {"line": context_scores_and_info["line_num"], "tar": line_scores["tar"],
-                "och": line_scores["och"],
-                "wong2": line_scores["wong2"],
-                "dstar": line_scores["dstar"],
-                "faulty": "false"}
+        if int(context_scores_and_info["line_num"]) in self.control_flow_dict.keys():
+            return {"line": context_scores_and_info["line_num"], "tar": line_scores["tar"],
+                    "och": line_scores["och"],
+                    "wong2": line_scores["wong2"],
+                    "dstar": line_scores["dstar"],
+                    "faulty": "false",
+                    "type": self.control_flow_dict[int(context_scores_and_info["line_num"])]["type"],
+                    "body": self.control_flow_dict[int(context_scores_and_info["line_num"])]["body"],
+                    "else": self.control_flow_dict[int(context_scores_and_info["line_num"])]["else"]
+                    }
+        else:
+            return {"line": context_scores_and_info["line_num"], "tar": line_scores["tar"],
+                    "och": line_scores["och"],
+                    "wong2": line_scores["wong2"],
+                    "dstar": line_scores["dstar"],
+                    "faulty": "false"
+                    }
 
     def __get_index_of_context_containing_property(self, list_in_dict, property_name, context_value):
         for idx, element in enumerate(list_in_dict):

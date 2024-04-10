@@ -9,6 +9,7 @@ from testing.Use_PyTest import Use_Pytest
 from faultloc.Spectra import Spectra
 from faultloc.Metrics import Metrics
 from utils.Result_Builder import Result_Builder
+from utils.Ranks import Ranks
 
 
 import call_graphs.statical_call_graph as cg
@@ -57,6 +58,7 @@ def main():
         line_metrics = Metrics()
         line_spectra.create_spectrum_from(line_cov, tests)
         line_metrics.create_scores_from(line_spectra)
+        ranks = Ranks()
 
         method_cov = Method_Coverage()
         method_spectra = Spectra()
@@ -81,9 +83,14 @@ def main():
             .set_class_scores(class_metrics.get_scores()) \
             .produce_results()
         result_filename = "CharmFL/results.json"
+        promoted_result_filename = "CharmFL/promoted_results.json"
         os.makedirs(os.path.dirname(result_filename), exist_ok=True)
+        ranked_result_json = ranks.add_average_ranks_to_statements(result_builder.get_score_results())
         with open(result_filename, "w") as output:
-            output.write(result_builder.toJSON())
+            output.write(ranks.to_json(ranked_result_json))
+        promoted_result_json = ranks.rerank_based_on_predicates(ranked_result_json)
+        with open(promoted_result_filename, "w") as output:
+            output.write(ranks.to_json(promoted_result_json))
 
     if (args["CallGraph"] == True):
         call_graph = cg.StaticalCallGraph()

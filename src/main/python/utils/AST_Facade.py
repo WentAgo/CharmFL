@@ -39,7 +39,7 @@ class AST_Facade():
         :param filename: absolute path to the file which contains methods and classes.
         :return: a set of methods or classes
         """
-        with open(filename) as file:
+        with open(filename, 'r', encoding='utf-8', errors='replace') as file:
             print(filename)
             node = ast.parse(file.read())
             functions = self.__get_elements_of_list(node, ast.FunctionDef)
