@@ -85,7 +85,7 @@ def main():
         result_filename = "CharmFL/results.json"
         promoted_result_filename = "CharmFL/promoted_results.json"
         os.makedirs(os.path.dirname(result_filename), exist_ok=True)
-        ranked_result_json = ranks.add_average_ranks_to_statements(result_builder.get_score_results())
+        ranked_result_json = ranks.add_average_ranks_to_statements(result_builder.get_score_results(), "original")
         with open(result_filename, "w") as output:
             output.write(ranks.to_json(ranked_result_json))
         promoted_result_json = ranks.rerank_based_on_predicates(ranked_result_json)

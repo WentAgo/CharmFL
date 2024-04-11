@@ -92,7 +92,7 @@ class Result_Builder():
                     'body': body_statements,
                     'else': last_else_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_For(self, node):
                 body_statements = [statement.lineno for statement in node.body]
@@ -100,7 +100,7 @@ class Result_Builder():
                     'type': 'For',
                     'body': body_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_While(self, node):
                 body_statements = [statement.lineno for statement in node.body]
@@ -108,7 +108,7 @@ class Result_Builder():
                     'type': 'While',
                     'body': body_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_Try(self, node):
                 body_statements = [statement.lineno for statement in node.body]
@@ -116,7 +116,7 @@ class Result_Builder():
                     'type': 'Try',
                     'body': body_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_ExceptHandler(self, node):
                 body_statements = [statement.lineno for statement in node.body]
@@ -124,7 +124,7 @@ class Result_Builder():
                     'type': 'Except',
                     'body': body_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_With(self, node):
                 body_statements = [statement.lineno for statement in node.body]
@@ -132,7 +132,7 @@ class Result_Builder():
                     'type': 'With',
                     'body': body_statements
                 }
-                #self.generic_visit(node)
+                self.generic_visit(node)
 
             def visit_FunctionDef(self, node):
                 self.generic_visit(node)
@@ -241,7 +241,7 @@ class Result_Builder():
                     "faulty": "false",
                     "type": self.control_flow_dict[int(context_scores_and_info["line_num"])]["type"],
                     "body": self.control_flow_dict[int(context_scores_and_info["line_num"])]["body"],
-                    "else": self.control_flow_dict[int(context_scores_and_info["line_num"])]["else"]
+                    "else": self.control_flow_dict[int(context_scores_and_info["line_num"])]["else"] if "else" in self.control_flow_dict[int(context_scores_and_info["line_num"])].keys() else ""
                     }
         else:
             return {"line": context_scores_and_info["line_num"], "tar": line_scores["tar"],
