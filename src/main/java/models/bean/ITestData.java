@@ -28,9 +28,9 @@ public interface ITestData {
 
     void setDstar(double dstar);
 
-    int getRank();
+    double getRank();
 
-    void setRank(int rank);
+    void setRank(double rank);
 
     boolean isFaulty();
 

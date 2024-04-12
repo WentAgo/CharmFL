@@ -27,7 +27,7 @@ public class StatementTableModel extends AbstractTableModel {
 
     public StatementTableModel(TestData testData, String selectedSpectraMetric, String selectedRankType) {
         parseData(testData);
-        setRanks();
+        //setRanks();
         this.selectedSpectraMetric = selectedSpectraMetric;
         this.selectedRankType = selectedRankType;
     }
@@ -47,6 +47,7 @@ public class StatementTableModel extends AbstractTableModel {
                     thirdData.setWong2Score(statementData.getWong2());
                     thirdData.setFaulty(statementData.isFaulty());
                     thirdData.setLevel(TableData.STATEMENT_LEVEL);
+                    thirdData.setAvgRank(statementData.getRank());
                     //thirdData.setHide(true);
 
                     this.tableDataList.add(thirdData);

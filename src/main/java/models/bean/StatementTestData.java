@@ -15,7 +15,7 @@ public class StatementTestData implements ITestData {
     private double ochiai;
     private double wong2;
     private double dstar;
-    private int rank;
+    private double rank;
     private boolean faulty;
     private CloseContext closeContext;
     private OtherContext otherContext;
@@ -208,11 +208,11 @@ public class StatementTestData implements ITestData {
     }
 
 
-    public int getRank() {
+    public double getRank() {
         return rank;
     }
 
-    public void setRank(int rank) {
+    public void setRank(double rank) {
         this.rank = rank;
     }
 

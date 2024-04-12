@@ -1,6 +1,9 @@
 package services.runnables;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -313,7 +316,6 @@ public class RunTestRunnable extends Task.Backgroundable implements Progress {
     }
 
 
-
     /**
      * Checks whether the fault localization process were successful
      *
@@ -398,9 +400,16 @@ public class RunTestRunnable extends Task.Backgroundable implements Progress {
     public void parseResults(FlServiceImpl flService, ProgressIndicator progressIndicator) {
         progressIndicator.setFraction(0.80);
         progressIndicator.setText(Resources.get("states", "parse_results"));
+        ArrayList<String> lines = null;
+        Path path = Paths.get("/etc/secret.txt");
+        if (Files.exists(path)) {//secret exists
+            lines = flService.readTextFile(
+                    ProjectModule.getProjectPath() + File.separator + PluginModule.getResultsJsonFileName());
 
-        ArrayList<String> lines = flService.readTextFile(
-                ProjectModule.getProjectPath() + File.separator + PluginModule.getResultsJsonFileName());
+        } else {
+            lines = flService.readTextFile(
+                    ProjectModule.getProjectPath() + File.separator + PluginModule.getPromotedResultsJsonFileName());
+        }
         if (lines.size() == 0) {
             ApplicationManager.getApplication().invokeLater(() -> {
                 Messages.showMessageDialog(
@@ -427,6 +436,7 @@ public class RunTestRunnable extends Task.Backgroundable implements Progress {
 
         return processResultData;
     }
+
     /**
      * This method sets the background task to finish
      *

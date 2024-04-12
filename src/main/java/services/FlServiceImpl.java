@@ -222,7 +222,7 @@ public class FlServiceImpl {
         String name;
         int line;
         double tarantula, ochiai, wong2, dstar;
-        int rank;
+        double rank;
         boolean faulty;
         String relativePath = "";
         ClassTestData classTestData;
@@ -345,8 +345,8 @@ public class FlServiceImpl {
                         ochiai = statementObject.getDouble("och");
                         wong2 = statementObject.getDouble("wong2");
                         dstar = statementObject.getDouble("dstar");
-                        if (statementObject.has("rank")) {
-                            rank = statementObject.getInt("rank");
+                        if (statementObject.has("promoted_tar_rank")) {
+                            rank = statementObject.getDouble("promoted_tar_rank");
                         } else {
                             rank = 0;
                         }
