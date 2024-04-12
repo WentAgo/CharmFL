@@ -93,8 +93,6 @@ class Ranks():
                     for statement in method_data['statements']:
                         if 'type' in statement:
                             if statement['type'] == 'If':
-                                if statement["line"] == "373":
-                                    print("shit")
                                 body_ranks = [stmt['tar_rank'] for stmt in method_data['statements'] if
                                               stmt['line'] in map(str, statement['body'])]
                                 else_ranks = [stmt['tar_rank'] for stmt in method_data['statements'] if

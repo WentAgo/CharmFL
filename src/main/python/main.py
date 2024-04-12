@@ -11,7 +11,6 @@ from faultloc.Metrics import Metrics
 from utils.Result_Builder import Result_Builder
 from utils.Ranks import Ranks
 
-
 import call_graphs.statical_call_graph as cg
 import sunburst_visualization_colours.sunburst as vs
 
@@ -40,13 +39,12 @@ def main():
     parser.add_argument("-v", "--version", action="version", help="Show version number.")
     parser.add_argument("-vs", "--SunBurst", help="To visalize the sunburst chart", action="store_true")
 
-
     args = vars(parser.parse_args())
     plugin_path = os.path.dirname(os.path.abspath(__file__))
     venv_path = ""
     if (platform.system() == "Linux"):
         venv_path = venv_path + "/venv/bin" + os.path.sep
-    if(platform.system() == "Windows"):
+    if (platform.system() == "Windows"):
         venv_path = venv_path + "/venv" + os.path.sep + "Scripts" + os.path.sep
     project_path = args["directory"]
     os.chdir(project_path)
@@ -77,10 +75,11 @@ def main():
         class_metrics.create_scores_from(class_spectra)
 
         result_builder = Result_Builder()
-        result_builder.set_path_to_root(project_path)\
+        result_builder.set_path_to_root(project_path) \
             .set_line_scores(line_metrics.get_scores()) \
             .set_method_scores(method_metrics.get_scores()) \
             .set_class_scores(class_metrics.get_scores()) \
+            .set_control_flow() \
             .produce_results()
         result_filename = "CharmFL/results.json"
         promoted_result_filename = "CharmFL/promoted_results.json"
@@ -92,6 +91,7 @@ def main():
         with open(promoted_result_filename, "w") as output:
             output.write(ranks.to_json(promoted_result_json))
 
+
     if (args["CallGraph"] == True):
         call_graph = cg.StaticalCallGraph()
         call_graph.createHTML()
@@ -100,8 +100,5 @@ def main():
         sunburst = vs.SunBurstVisualization(project_path)
         sunburst.createHTML()
 
-
 if __name__ == "__main__":
     main()
-
-

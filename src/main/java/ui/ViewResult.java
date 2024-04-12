@@ -247,8 +247,7 @@ public class ViewResult extends DialogWrapper {
         if (!(table.getModel().getClass().toString()).equals(TreeTableModel.class.toString())) {
             final TableRowSorter<TableModel> sorter = new TableRowSorter<>(table.getModel());
             table.setRowSorter(sorter);
-            table.getRowSorter().toggleSortOrder(2);
-            table.getRowSorter().toggleSortOrder(2);
+            table.getRowSorter().toggleSortOrder(3);
 
             JPanel headerPanel = new JPanel();
             headerPanel.setLayout(new BoxLayout(headerPanel, BoxLayout.Y_AXIS));

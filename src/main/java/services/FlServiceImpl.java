@@ -347,6 +347,8 @@ public class FlServiceImpl {
                         dstar = statementObject.getDouble("dstar");
                         if (statementObject.has("promoted_tar_rank")) {
                             rank = statementObject.getDouble("promoted_tar_rank");
+                        } else if (statementObject.has("tar_rank")) {
+                            rank = statementObject.getDouble("tar_rank");
                         } else {
                             rank = 0;
                         }

@@ -404,11 +404,11 @@ public class RunTestRunnable extends Task.Backgroundable implements Progress {
         Path path = Paths.get("/etc/secret.txt");
         if (Files.exists(path)) {//secret exists
             lines = flService.readTextFile(
-                    ProjectModule.getProjectPath() + File.separator + PluginModule.getResultsJsonFileName());
+                    ProjectModule.getProjectPath() + File.separator + PluginModule.getPromotedResultsJsonFileName());
 
         } else {
             lines = flService.readTextFile(
-                    ProjectModule.getProjectPath() + File.separator + PluginModule.getPromotedResultsJsonFileName());
+                    ProjectModule.getProjectPath() + File.separator + PluginModule.getResultsJsonFileName());
         }
         if (lines.size() == 0) {
             ApplicationManager.getApplication().invokeLater(() -> {
