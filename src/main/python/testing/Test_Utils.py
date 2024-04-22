@@ -20,6 +20,10 @@ class Test_Utils:
             tests_folder = "tests"
         if os.path.isdir(project_path + os.path.sep + "test"):
             test_folder = "test"
+        if os.path.isdir(project_path + os.path.sep + "pandas" + os.path.sep + "test"):
+            test_folder = "pandas" + os.path.sep + "test"
+        if os.path.isdir(project_path + os.path.sep + "pandas" + os.path.sep + "tests"):
+            tests_folder = "pandas" + os.path.sep + "tests"
 
 
         if tests_folder == "" and test_folder == "":
