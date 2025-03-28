@@ -15,24 +15,24 @@ class Spectra:
         number_of_fails = test_object.get_number_of_failed_test_cases()
         number_of_pass = test_object.get_number_of_passed_test_cases()
 
-
-
         for file, cov_elements in coverage_result.items():
             for code_element, covered_tests in cov_elements.items():
                 ef, ep = 0, 0
+                ef_mod, ep_mod = 0, 0
                 for test in covered_tests:
-                    h = self.heuristic_analyzer(test)
-                    #if test in test_result:
                     counted_tests = [t for t in test_result if str(t).endswith(test)]
                     if len(counted_tests) == 1:
                         ef = ef + 1 if test_result[counted_tests[0]] == "FAILED" else ef
-                        ep = ep + 1 if test_result[counted_tests[0]] == "PASSED" and h != "put" else ep
-                    else:
-                        print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-                        print(test)
+                        ep = ep + 1 if test_result[counted_tests[0]] == "PASSED" else ep
+
+                        h = self.heuristic_analyzer(test)
+                        ef_mod = ef_mod + 1 if test_result[counted_tests[0]] == "FAILED" else ef_mod
+                        ep_mod = ep_mod + 1 if test_result[counted_tests[0]] == "PASSED" and h != "put" else ep_mod
+
                 nf = number_of_fails - ef
                 np = number_of_pass - ep
-                self.spectrum[str(file)+self.SEPARATOR_CHARACTER+str(code_element)] = {"ef": ef, "ep":ep, "nf":nf,"np":np}
+
+                self.spectrum[str(file)+self.SEPARATOR_CHARACTER+str(code_element)] = {"ef": ef, "ep":ep, "nf":nf,"np":np, "efmod": ef_mod, "epmod" : ep_mod}
 
     def heuristic_analyzer(self,test):
         #chains from JSON

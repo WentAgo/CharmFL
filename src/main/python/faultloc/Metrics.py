@@ -19,9 +19,11 @@ class Metrics:
             wong2_score = self.wong2(stats["ef"], stats["ep"], stats["nf"], stats["np"])
             dstar_score = self.dstar(stats["ef"], stats["ep"], stats["nf"], stats["np"])
             barinel_score = self.barinel(stats["ef"], stats["ep"], stats["nf"], stats["np"])
+            modified_barinel_score = self.barinel(stats["efmod"], stats["epmod"], stats["nf"], stats["np"])
             self.scores_for_code_elements[code_element] = {"tar": tarantula_score, "och": ochiai_score,
                                                            "wong2": wong2_score, "dstar": dstar_score,
-                                                           "barinel": barinel_score}
+                                                           "barinel": barinel_score,
+                                                           "modified_barinel": modified_barinel_score}
 
     def get_scores(self):
         return self.scores_for_code_elements
