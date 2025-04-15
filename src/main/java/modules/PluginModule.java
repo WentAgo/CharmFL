@@ -13,7 +13,9 @@ public class PluginModule {
     private static final String CHECK_PIP_BIN = "check_pip.py";
     private static final String PIP_BIN = "pip";
     private static final String REQUIREMENTS_FILE_NAME = "requirements.txt";
-    private static final String RESULTS_JSON_FILE_NAME = "results.json";
+
+    private static final String RESULTS_JSON_FILE_NAME = "CharmFL"+File.separator+"results.json";
+    private static final String PROMOTED_RESULTS_JSON_FILE_NAME = "CharmFL"+File.separator+"promoted_results.json";
     private static PluginId pluginId = null;
     private static String pluginPath = "";
     private static String pyflBinPath = "";
@@ -27,7 +29,8 @@ public class PluginModule {
     private static String pythonBinPath;
     private static String pipBinPath;
 
-    private static boolean tarantulaSelected = true;
+    private static boolean barinelSelected = true;
+    private static boolean tarantulaSelected = false;
     private static boolean ochiaiSelected = false;
     private static boolean dStarSelected = false;
     private static boolean wongIISelected = false;
@@ -145,6 +148,14 @@ public class PluginModule {
 
     public static void setPythonBinPath(String pythonBinPath) {
         PluginModule.pythonBinPath = pythonBinPath;
+    }
+
+    public static boolean isBarinelSelected() {
+        return barinelSelected;
+    }
+
+    public static void setBarinelSelected(boolean barinelSelected) {
+        PluginModule.barinelSelected = barinelSelected;
     }
 
     /**

@@ -221,7 +221,7 @@ public class FlServiceImpl {
         JSONObject fileObject, classObject, methodObject, statementObject;
         String name;
         int line;
-        double tarantula, ochiai, wong2, dstar;
+        double tarantula, ochiai, wong2, dstar, barinel, barinelModified;
         int rank;
         boolean faulty;
         String relativePath = "";
@@ -313,6 +313,17 @@ public class FlServiceImpl {
                     } else {
                         dstar = 0;
                     }
+                    if (methodObject.has("barinel")){
+                        barinel = methodObject.getDouble("barinel");
+                    } else {
+                        barinel = 0;
+                    }
+                    if (methodObject.has("modified_barinel")){
+                        barinelModified = methodObject.getDouble("modified_barinel");
+                    } else{
+                        barinelModified = 0;
+                    }
+
                     if (methodObject.has("rank")) {
                         rank = methodObject.getInt("rank");
                     } else {
@@ -334,6 +345,8 @@ public class FlServiceImpl {
                     methodTestData.setOchiai(ochiai);
                     methodTestData.setWong2(wong2);
                     methodTestData.setDstar(dstar);
+                    methodTestData.setBarinel(barinel);
+                    methodTestData.setBarinelModified(barinelModified);
                     methodTestData.setRank(rank);
                     methodTestData.setFaulty(faulty);
 

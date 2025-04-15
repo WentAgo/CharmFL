@@ -16,6 +16,8 @@ public class TableData {
     private double tarantulaScore;
     private double ochiaiScore;
     private double wong2Score;
+    private double barinelScore;
+    private double barinelModifiedScore;
     private double minRank;
     private double maxRank;
     private double avgRank;
@@ -31,6 +33,8 @@ public class TableData {
         tarantulaScore = 0;
         ochiaiScore = 0;
         wong2Score = 0;
+        barinelScore = 0;
+        barinelModifiedScore = 0;
         minRank = 0;
         maxRank = 0;
         avgRank = 0;
@@ -86,6 +90,22 @@ public class TableData {
 
     public void setWong2Score(double wong2Score) {
         this.wong2Score = wong2Score;
+    }
+
+    public double getBarinelScore() {
+        return barinelScore;
+    }
+
+    public void setBarinelScore(double barinelScore) {
+        this.barinelScore = barinelScore;
+    }
+
+    public double getBarinelModifiedScore() {
+        return barinelModifiedScore;
+    }
+
+    public void setBarinelModifiedScore(double barinelModifiedScore) {
+        this.barinelModifiedScore = barinelModifiedScore;
     }
 
     public double getMinRank() {
