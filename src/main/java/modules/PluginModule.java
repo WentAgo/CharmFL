@@ -15,6 +15,7 @@ public class PluginModule {
     private static final String REQUIREMENTS_FILE_NAME = "requirements.txt";
 
     private static final String RESULTS_JSON_FILE_NAME = "CharmFL"+File.separator+"results.json";
+    private static final String CC_JSON_FILE_NAME = "cc.json";
     private static final String PROMOTED_RESULTS_JSON_FILE_NAME = "CharmFL"+File.separator+"promoted_results.json";
     private static PluginId pluginId = null;
     private static String pluginPath = "";
@@ -144,6 +145,10 @@ public class PluginModule {
      */
     public static final String getResultsJsonFileName() {
         return RESULTS_JSON_FILE_NAME;
+    }
+
+    public static final String getCcJsonFileName() {
+        return CC_JSON_FILE_NAME;
     }
 
     public static void setPythonBinPath(String pythonBinPath) {

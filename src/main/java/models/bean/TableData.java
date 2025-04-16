@@ -26,6 +26,12 @@ public class TableData {
     private int level;
     private boolean hide;
 
+    private String testName;
+
+    private String testResult;
+
+    private String testHeuristic;
+
     public TableData() {
         name = "";
         path = "";
@@ -42,6 +48,9 @@ public class TableData {
         icon = null;
         level = 0;
         hide = false;
+        testName = "";
+        testResult = "";
+        testHeuristic = "";
     }
 
     public String getName() {
@@ -154,6 +163,30 @@ public class TableData {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public String getTestName() {
+        return testName;
+    }
+
+    public void setTestName(String testName) {
+        this.testName = testName;
+    }
+
+    public String getTestResult() {
+        return testResult;
+    }
+
+    public void setTestResult(String testResult) {
+        this.testResult = testResult;
+    }
+
+    public String getTestHeuristic() {
+        return testHeuristic;
+    }
+
+    public void setTestHeuristic(String testHeuristic) {
+        this.testHeuristic = testHeuristic;
     }
 
     /**

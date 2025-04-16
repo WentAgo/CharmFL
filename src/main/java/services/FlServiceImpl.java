@@ -2,6 +2,7 @@ package services;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.fileEditor.FileEditorManagerEvent;
@@ -23,9 +24,11 @@ import static services.ProcessService.executeCommand;
 
 public class FlServiceImpl {
     private static TestData testData = null;
+    private static ViewTestData viewTestData = null;
     private static boolean testDataCollected = false;
     private static boolean fileEditorColoringEnabled = false;
     private static boolean viewResultTableDialogOpened = false;
+    private static boolean viewTestTableDialogOpened = false;
     private static boolean testDataCollecting = false;
 
     /**
@@ -391,6 +394,42 @@ public class FlServiceImpl {
         return testData;
     }
 
+
+    public ViewTestData parseViewTestDataJSON(ArrayList<String> lines) {
+        ViewTestData viewTestData = ViewTestData.getInstance();
+        String json = String.join(" ", lines);
+        JSONObject jsonObject = new JSONObject(json);
+
+        for (String testname : jsonObject.keySet()) {
+            JSONArray arr = jsonObject.getJSONArray(testname);
+            String result = arr.optString(0);
+            String heuristic = arr.optString(1);
+
+            TestResultData testResult = new TestResultData();
+            testResult.setTestname(testname);
+            ArrayList<String> list = new ArrayList<>();
+            list.add(result);
+            list.add(heuristic);
+            testResult.setList(list);
+
+            HashMap<String, ArrayList> hash= new HashMap<>();
+            hash.put(testResult.getTestname(), testResult.getList());
+
+            viewTestData.setTests(hash);
+        }
+
+        return viewTestData;
+    }
+
+
+    public static ViewTestData getViewTestData() {
+        return viewTestData;
+    }
+
+    public static void setViewTestData(ViewTestData viewTestData) {
+        FlServiceImpl.viewTestData = viewTestData;
+    }
+
     public TestData getTestData() {
         return FlServiceImpl.testData;
     }
@@ -468,6 +507,14 @@ public class FlServiceImpl {
 
     public void setViewResultTableDialogOpened(boolean viewResultTableDialogOpened) {
         FlServiceImpl.viewResultTableDialogOpened = viewResultTableDialogOpened;
+    }
+
+    public static boolean isViewTestTableDialogOpened() {
+        return viewTestTableDialogOpened;
+    }
+
+    public static void setViewTestTableDialogOpened(boolean viewTestTableDialogOpened) {
+        FlServiceImpl.viewTestTableDialogOpened = viewTestTableDialogOpened;
     }
 
     public boolean isTestDataCollecting() {
