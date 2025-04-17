@@ -399,6 +399,7 @@ public class FlServiceImpl {
         ViewTestData viewTestData = ViewTestData.getInstance();
         String json = String.join(" ", lines);
         JSONObject jsonObject = new JSONObject(json);
+        HashMap<String, ArrayList<String>> hash= new HashMap<>();
 
         for (String testname : jsonObject.keySet()) {
             JSONArray arr = jsonObject.getJSONArray(testname);
@@ -412,7 +413,6 @@ public class FlServiceImpl {
             list.add(heuristic);
             testResult.setList(list);
 
-            HashMap<String, ArrayList> hash= new HashMap<>();
             hash.put(testResult.getTestname(), testResult.getList());
 
             viewTestData.setTests(hash);

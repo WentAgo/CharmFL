@@ -5,12 +5,16 @@ import com.intellij.ui.JBColor;
 import com.intellij.ui.SearchTextField;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
+import models.bean.TestData;
 import models.bean.ViewTestData;
 import modules.PluginModule;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import services.FlServiceImpl;
 import services.Resources;
+import ui.listener.CallChainTableMouseListener;
+import ui.listener.ClassTableMouseListener;
+import ui.listener.TreeViewTableMouseListener;
 import ui.viewResultTableModels.*;
 
 import javax.swing.*;
@@ -21,13 +25,14 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.awt.event.*;
 
+import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
+
 public class ViewTest extends DialogWrapper {
 
-    private final FlServiceImpl flService = null;
-    private final ViewTestData viewTestData = null;
+    private final FlServiceImpl flService;
+    private final ViewTestData viewTestData;
     private TestTableModel testViewTableModel;
     private JTable testViewTable;
-    private JTable treeViewTable;
     private JTabbedPane tabsPane;
 
     public ViewTest() {
@@ -59,6 +64,9 @@ public class ViewTest extends DialogWrapper {
 
         setTitle(title);
 
+        flService = new FlServiceImpl();
+        viewTestData = ViewTestData.getInstance();
+        testViewTableModel = new TestTableModel(viewTestData);
 
         setModal(false);
         getWindow().addWindowListener(new WindowAdapter() {
@@ -140,6 +148,18 @@ public class ViewTest extends DialogWrapper {
     @Nullable
     @Override
     protected JComponent createCenterPanel() {
+        this.testViewTable = new JBTable(testViewTableModel);
+
+        testViewTable.addMouseListener(new CallChainTableMouseListener(testViewTable,viewTestData));
+        //testViewTable.setSelectionMode(SINGLE_SELECTION);
+        //testViewTable.setAutoCreateRowSorter(true);
+        testViewTable.getColumnModel().getColumn(TestTableModel.TESTNAME_COLUMN_INDEX).setPreferredWidth(250);
+        testViewTable.getColumnModel().getColumn(TestTableModel.RESULT_COLUMN_INDEX).setPreferredWidth(75);
+        testViewTable.getColumnModel().getColumn(TestTableModel.HEURISTIC_COLUMN_INDEX).setPreferredWidth(75);
+        tabsPane.addTab(Resources.get("titles", "tree_pane"), createTableScrollPane(testViewTable));
+        tabsPane.setPreferredSize(new Dimension(500, 500));
+        tabsPane.setLocation(600,300);
+        pack();
         return tabsPane;
     }
 
