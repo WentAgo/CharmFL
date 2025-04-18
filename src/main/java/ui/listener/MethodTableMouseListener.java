@@ -78,7 +78,6 @@ public class MethodTableMouseListener extends AbstractTableMouseListener {
                 String fullMethodName = fileBaseName + "." + methodFormatted;
 
                 String filename = "/html/methods/" + fullMethodName + "_call_chain.html";
-                System.out.println(filename);
 
                 new CallGraphView(filename, ProjectModule.getProject()).show();
             }

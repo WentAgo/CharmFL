@@ -151,12 +151,12 @@ public class ViewTest extends DialogWrapper {
         this.testViewTable = new JBTable(testViewTableModel);
 
         testViewTable.addMouseListener(new CallChainTableMouseListener(testViewTable,viewTestData));
-        //testViewTable.setSelectionMode(SINGLE_SELECTION);
-        //testViewTable.setAutoCreateRowSorter(true);
+        testViewTable.setSelectionMode(SINGLE_SELECTION);
+        testViewTable.setAutoCreateRowSorter(true);
         testViewTable.getColumnModel().getColumn(TestTableModel.TESTNAME_COLUMN_INDEX).setPreferredWidth(250);
         testViewTable.getColumnModel().getColumn(TestTableModel.RESULT_COLUMN_INDEX).setPreferredWidth(75);
         testViewTable.getColumnModel().getColumn(TestTableModel.HEURISTIC_COLUMN_INDEX).setPreferredWidth(75);
-        tabsPane.addTab(Resources.get("titles", "tree_pane"), createTableScrollPane(testViewTable));
+        tabsPane.addTab(Resources.get("titles", "test_call_graph_title"), createTableScrollPane(testViewTable));
         tabsPane.setPreferredSize(new Dimension(500, 500));
         tabsPane.setLocation(600,300);
         pack();
