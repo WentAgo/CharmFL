@@ -59,7 +59,7 @@ class Spectra:
         if all([len(elem) == 1 for elem in chains]) and 0 < chain_lengths <= 1:
             return "put"
 
-        if all([len(elem) <= 2 for elem in chains]) and chain_lengths > 0:
+        if all([len(elem) <= 1 for elem in chains]) and chain_lengths > 0:
             return "smt"
 
         if chain_lengths == 1:
