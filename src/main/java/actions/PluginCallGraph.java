@@ -95,7 +95,9 @@ public class PluginCallGraph extends DumbAwareAction {
                     "\nThe file is located at " + ProjectModule.getProjectPath() + File.separator + "static_call_graph.html", "Call Graph is ready", JOptionPane.PLAIN_MESSAGE);
             */
             //new PopUpView("static_call_graph.html").show();
-            new CallGraphView("callchains.html", e.getProject()).show();
+            String path = "/html/";
+            String filename = "callchains.html";
+            new CallGraphView(path + filename, e.getProject()).show();
         } else {
             Messages.showMessageDialog(
                     e.getProject(),

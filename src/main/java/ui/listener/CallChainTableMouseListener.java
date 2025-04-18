@@ -28,15 +28,17 @@ public class CallChainTableMouseListener extends AbstractTableMouseListener{
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        String path = "/html/tests/";
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
             int row = resultTable.rowAtPoint(e.getPoint());
             int column = resultTable.columnAtPoint(e.getPoint());
 
             if (row >= 0 && column >= 0) {
                 Object value = resultTable.getValueAt(row, column);
-                String filename = value != null ? value + "_call_chain.html" : "";
-                System.out.println(filename);
-                new CallGraphView(filename, ProjectModule.getProject()).show();
+                String filename = value != null ? path + value + "_call_chain.html" : "";
+                if (!filename.isEmpty()){
+                    new CallGraphView(filename, ProjectModule.getProject()).show();
+                }
             }
         }
     }

@@ -14,6 +14,7 @@ import models.bean.ITestData;
 import models.bean.MethodTestData;
 import models.bean.TestData;
 import modules.ProjectModule;
+import ui.CallGraphView;
 import ui.viewResultTableModels.MethodTableModel;
 
 import javax.swing.*;
@@ -31,6 +32,8 @@ public class MethodTableMouseListener extends AbstractTableMouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         int selectedRow = resultTable.getSelectedRow();
+        int row = resultTable.rowAtPoint(e.getPoint());
+        int column = resultTable.columnAtPoint(e.getPoint());
 
         if (e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1) {
             String fileName = ((String) resultTable.getValueAt(resultTable.getSelectedRow(), MethodTableModel.FILE_NAME_COLUMN_INDEX));
@@ -63,6 +66,22 @@ public class MethodTableMouseListener extends AbstractTableMouseListener {
                             MethodTableModel.FILE_NAME_COLUMN_INDEX).toString(),
                     name,
                     selected.getLine());
+
+            Object value = resultTable.getValueAt(row, column);
+            if (value != null) {
+                String methodValue = value.toString();
+
+                String fileNameOnly = resultTable.getValueAt(row, column - 1).toString();
+                String fileBaseName = fileNameOnly.replace(".py", "");
+
+                String methodFormatted = methodValue.replace("\\", "_").replace("/", "_");
+                String fullMethodName = fileBaseName + "." + methodFormatted;
+
+                String filename = "/html/methods/" + fullMethodName + "_call_chain.html";
+                System.out.println(filename);
+
+                new CallGraphView(filename, ProjectModule.getProject()).show();
+            }
         }
     }
 
