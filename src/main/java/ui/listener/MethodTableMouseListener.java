@@ -66,20 +66,23 @@ public class MethodTableMouseListener extends AbstractTableMouseListener {
                             MethodTableModel.FILE_NAME_COLUMN_INDEX).toString(),
                     name,
                     selected.getLine());
+        }
+        if (e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON3){
+            if (column == MethodTableModel.NAME_COLUMN_INDEX){
+                Object value = resultTable.getValueAt(row, column);
+                if (value != null) {
+                    String methodValue = value.toString();
 
-            Object value = resultTable.getValueAt(row, column);
-            if (value != null) {
-                String methodValue = value.toString();
+                    String fileNameOnly = resultTable.getValueAt(row, 0).toString();
+                    String fileBaseName = fileNameOnly.replace(".py", "");
 
-                String fileNameOnly = resultTable.getValueAt(row, column - 1).toString();
-                String fileBaseName = fileNameOnly.replace(".py", "");
+                    String methodFormatted = methodValue.replace("\\", "_").replace("/", "_");
+                    String fullMethodName = fileBaseName + "." + methodFormatted;
 
-                String methodFormatted = methodValue.replace("\\", "_").replace("/", "_");
-                String fullMethodName = fileBaseName + "." + methodFormatted;
+                    String filename = "/html/methods/" + fullMethodName + "_call_chain.html";
 
-                String filename = "/html/methods/" + fullMethodName + "_call_chain.html";
-
-                new CallGraphView(filename, ProjectModule.getProject()).show();
+                    new CallGraphView(filename, ProjectModule.getProject()).show();
+                }
             }
         }
     }
